@@ -3,7 +3,6 @@
 
 int main()
 {
-    // grafo de aulas/aula04/grafo_dijkstra.dot (A=0, B=1, C=2, D=3)
     GrafoListaPonderado *digrafo = criar_grafo(4);
 
     adicionar_arco(digrafo, 0, 1, 4);
@@ -28,29 +27,36 @@ int main()
     }
     printf("\n");
 
-    // grafo não orientado de aulas/aula04/grafo_prim.dot (A=0 ... E=4)
-    GrafoListaPonderado *grafo = criar_grafo(5);
+    // grafo da aula (A=0, B=1, C=2, D=3, E=4, F=5)
+    GrafoListaPonderado *grafo = criar_grafo(6);
 
-    adicionar_aresta(grafo, 0, 1, 2);
-    adicionar_aresta(grafo, 0, 2, 3);
-    adicionar_aresta(grafo, 1, 2, 1);
-    adicionar_aresta(grafo, 1, 3, 4);
-    adicionar_aresta(grafo, 2, 3, 5);
-    adicionar_aresta(grafo, 2, 4, 7);
-    adicionar_aresta(grafo, 3, 4, 6);
+    adicionar_aresta(grafo, 0, 1, 4);  // A - B
+    adicionar_aresta(grafo, 0, 2, 2);  // A - C
+    adicionar_aresta(grafo, 1, 2, 1);  // B - C
+    adicionar_aresta(grafo, 1, 3, 5);  // B - D
+    adicionar_aresta(grafo, 1, 4, 8);  // B - E
+    adicionar_aresta(grafo, 2, 3, 4);  // C - D
+    adicionar_aresta(grafo, 2, 4, 10); // C - E
+    adicionar_aresta(grafo, 3, 4, 2);  // D - E
+    adicionar_aresta(grafo, 3, 5, 1);  // D - F
+    adicionar_aresta(grafo, 4, 5, 3);  // E - F
 
     printf("Grafo ponderado nao orientado\n");
     imprimir_grafo(grafo);
 
-    int dist2[5];
-    int pred2[5];
+    int dist2[6];
+    int pred2[6];
     dijkstra(grafo, 0, dist2, pred2);
 
-    printf("Menor caminho de A ate E: distancia %i, caminho ", dist2[4]);
-    reconstruir_caminho(0, 4, pred2);
-    printf("\n\n");
+    printf("Dijkstra a partir de A\n");
+    for (int v = 0; v < grafo->num_vertices; v++)
+    {
+        printf("A ate %c: distancia %i, caminho ", 'A' + v, dist2[v]);
+        reconstruir_caminho(0, v, pred2);
+        printf("\n");
+    }
+    printf("\n");
 
-    // vértice isolado não é alcançado
     GrafoListaPonderado *desconexo = criar_grafo(3);
     adicionar_aresta(desconexo, 0, 1, 2);
 
