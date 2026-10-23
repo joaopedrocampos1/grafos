@@ -27,7 +27,6 @@ int main()
     }
     printf("\n");
 
-    // grafo da aula (A=0, B=1, C=2, D=3, E=4, F=5)
     GrafoListaPonderado *grafo = criar_grafo(6);
 
     adicionar_aresta(grafo, 0, 1, 4);  // A - B
