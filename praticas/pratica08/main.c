@@ -3,21 +3,24 @@
 
 int main()
 {
-    // grafo de aulas/aula04/grafo_kruskal.dot e grafo_prim.dot (A=0 ... E=4)
-    GrafoListaPonderado *grafo = criar_grafo(5);
+    // grafo de grafo.dot (A=0, B=1, C=2, D=3, E=4, F=5)
+    GrafoListaPonderado *grafo = criar_grafo(6);
 
-    adicionar_aresta(grafo, 1, 2, 1); // B - C
-    adicionar_aresta(grafo, 0, 1, 2); // A - B
-    adicionar_aresta(grafo, 0, 2, 3); // A - C
-    adicionar_aresta(grafo, 1, 3, 4); // B - D
-    adicionar_aresta(grafo, 2, 3, 5); // C - D
-    adicionar_aresta(grafo, 3, 4, 6); // D - E
-    adicionar_aresta(grafo, 2, 4, 7); // C - E
+    adicionar_aresta(grafo, 0, 1, 4);  // A - B
+    adicionar_aresta(grafo, 0, 2, 2);  // A - C
+    adicionar_aresta(grafo, 1, 2, 1);  // B - C
+    adicionar_aresta(grafo, 1, 3, 5);  // B - D
+    adicionar_aresta(grafo, 1, 4, 8);  // B - E
+    adicionar_aresta(grafo, 2, 3, 4);  // C - D
+    adicionar_aresta(grafo, 2, 4, 10); // C - E
+    adicionar_aresta(grafo, 3, 4, 2);  // D - E
+    adicionar_aresta(grafo, 3, 5, 1);  // D - F
+    adicionar_aresta(grafo, 4, 5, 3);  // E - F
 
     printf("Grafo ponderado\n");
     imprimir_grafo(grafo);
 
-    Aresta agm[4];
+    Aresta agm[5];
     int total = kruskal(grafo, agm);
 
     printf("Kruskal\n");
@@ -27,7 +30,7 @@ int main()
     }
     printf("Peso total = %i\n\n", total);
 
-    int pred[5];
+    int pred[6];
     total = prim(grafo, 0, pred);
 
     printf("Prim a partir de A\n");
