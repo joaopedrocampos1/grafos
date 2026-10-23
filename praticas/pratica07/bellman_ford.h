@@ -18,6 +18,7 @@ typedef struct
 
 GrafoListaPonderado *criar_grafo(int n);
 void adicionar_arco(GrafoListaPonderado *g, int u, int v, int p);
+void adicionar_aresta(GrafoListaPonderado *g, int u, int v, int p);
 void imprimir_grafo(GrafoListaPonderado *g);
 
 // Retorna 1 se calculou as distâncias ou 0 se existe ciclo negativo.

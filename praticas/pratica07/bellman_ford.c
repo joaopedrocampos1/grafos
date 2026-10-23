@@ -24,6 +24,12 @@ void adicionar_arco(GrafoListaPonderado *g, int u, int v, int p)
     g->lista[u] = no;
 }
 
+void adicionar_aresta(GrafoListaPonderado *g, int u, int v, int p)
+{
+    adicionar_arco(g, u, v, p);
+    adicionar_arco(g, v, u, p);
+}
+
 void imprimir_grafo(GrafoListaPonderado *g)
 {
     printf("\n");

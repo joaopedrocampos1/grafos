@@ -3,28 +3,29 @@
 
 int main()
 {
-    // digrafo com pesos negativos, mas sem ciclo negativo
-    GrafoListaPonderado *digrafo = criar_grafo(5);
+    // grafo de grafo.dot (A=0, B=1, C=2, D=3, E=4, F=5)
+    GrafoListaPonderado *grafo = criar_grafo(6);
 
-    adicionar_arco(digrafo, 0, 1, 6);
-    adicionar_arco(digrafo, 0, 2, 7);
-    adicionar_arco(digrafo, 1, 2, 8);
-    adicionar_arco(digrafo, 1, 3, 5);
-    adicionar_arco(digrafo, 1, 4, -4);
-    adicionar_arco(digrafo, 2, 3, -3);
-    adicionar_arco(digrafo, 2, 4, 9);
-    adicionar_arco(digrafo, 3, 1, -2);
-    adicionar_arco(digrafo, 4, 3, 7);
+    adicionar_aresta(grafo, 0, 1, 4);  // A - B
+    adicionar_aresta(grafo, 0, 2, 2);  // A - C
+    adicionar_aresta(grafo, 1, 2, 1);  // B - C
+    adicionar_aresta(grafo, 1, 3, 5);  // B - D
+    adicionar_aresta(grafo, 1, 4, 8);  // B - E
+    adicionar_aresta(grafo, 2, 3, 4);  // C - D
+    adicionar_aresta(grafo, 2, 4, 10); // C - E
+    adicionar_aresta(grafo, 3, 4, 2);  // D - E
+    adicionar_aresta(grafo, 3, 5, 1);  // D - F
+    adicionar_aresta(grafo, 4, 5, 3);  // E - F
 
-    printf("Digrafo com pesos negativos\n");
-    imprimir_grafo(digrafo);
+    printf("Grafo ponderado nao orientado\n");
+    imprimir_grafo(grafo);
 
-    int dist[5];
-    int pred[5];
-    if (bellman_ford(digrafo, 0, dist, pred))
+    int dist[6];
+    int pred[6];
+    if (bellman_ford(grafo, 0, dist, pred))
     {
         printf("Bellman-Ford a partir de A\n");
-        for (int v = 0; v < digrafo->num_vertices; v++)
+        for (int v = 0; v < grafo->num_vertices; v++)
         {
             printf("A ate %c: distancia %i (predecessor ", 'A' + v, dist[v]);
             if (pred[v] == -1)
@@ -35,31 +36,37 @@ int main()
     }
     else
     {
-        reconstruir_ciclo_negativo(digrafo, dist, pred);
+        reconstruir_ciclo_negativo(grafo, dist, pred);
     }
     printf("\n");
 
-    // digrafo com o ciclo negativo B -> C -> D -> B (1 - 3 + 1 = -1)
-    GrafoListaPonderado *com_ciclo = criar_grafo(5);
+    // mesmo grafo, mas com D - E = -2. Como a aresta vale nos dois sentidos,
+    // ir e voltar por ela (D -> E -> D) já é um ciclo de custo -4
+    GrafoListaPonderado *negativo = criar_grafo(6);
 
-    adicionar_arco(com_ciclo, 0, 1, 4);
-    adicionar_arco(com_ciclo, 1, 2, 1);
-    adicionar_arco(com_ciclo, 2, 3, -3);
-    adicionar_arco(com_ciclo, 3, 1, 1);
-    adicionar_arco(com_ciclo, 3, 4, 2);
+    adicionar_aresta(negativo, 0, 1, 4);  // A - B
+    adicionar_aresta(negativo, 0, 2, 2);  // A - C
+    adicionar_aresta(negativo, 1, 2, 1);  // B - C
+    adicionar_aresta(negativo, 1, 3, 5);  // B - D
+    adicionar_aresta(negativo, 1, 4, 8);  // B - E
+    adicionar_aresta(negativo, 2, 3, 4);  // C - D
+    adicionar_aresta(negativo, 2, 4, 10); // C - E
+    adicionar_aresta(negativo, 3, 4, -2); // D - E (negativa)
+    adicionar_aresta(negativo, 3, 5, 1);  // D - F
+    adicionar_aresta(negativo, 4, 5, 3);  // E - F
 
-    printf("Digrafo com ciclo negativo\n");
-    imprimir_grafo(com_ciclo);
+    printf("Grafo com a aresta D - E negativa\n");
+    imprimir_grafo(negativo);
 
-    int dist2[5];
-    int pred2[5];
-    if (bellman_ford(com_ciclo, 0, dist2, pred2))
+    int dist2[6];
+    int pred2[6];
+    if (bellman_ford(negativo, 0, dist2, pred2))
     {
         printf("Nenhum ciclo negativo\n");
     }
     else
     {
-        reconstruir_ciclo_negativo(com_ciclo, dist2, pred2);
+        reconstruir_ciclo_negativo(negativo, dist2, pred2);
     }
 
     return 0;
