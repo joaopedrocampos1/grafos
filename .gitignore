@@ -53,3 +53,6 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# Executaveis compilados das praticas
+praticas/*/main
