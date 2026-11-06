@@ -14,7 +14,6 @@ void imprimir_cobertura(int *cobertura, int n, int tamanho)
     printf(" } tamanho %i\n", tamanho);
 }
 
-// cada par de vértices tem 50% de chance de virar aresta
 int gerar_arestas(Aresta *a, int n)
 {
     int m = 0;
@@ -52,7 +51,6 @@ void experimento(int n)
 
 int main()
 {
-    // grafo de grafo.dot (A=0, B=1, C=2, D=3, E=4, F=5); os pesos não importam aqui
     int n = 6;
     Aresta arestas[] = {
         {0, 1}, // A - B
@@ -68,11 +66,9 @@ int main()
     };
     int m = sizeof(arestas) / sizeof(arestas[0]);
 
-    // C1 = {B, C, D, E}
     int c1[] = {0, 1, 1, 1, 1, 0};
     printf("C1 = {B, C, D, E} eh cobertura? %i\n", eh_cobertura(arestas, c1, m));
 
-    // C2 = {B, C, D}: a aresta E - F fica de fora
     int c2[] = {0, 1, 1, 1, 0, 0};
     printf("C2 = {B, C, D} eh cobertura? %i\n\n", eh_cobertura(arestas, c2, m));
 
@@ -85,7 +81,6 @@ int main()
     printf("Gulosa:       ");
     imprimir_cobertura(cobertura, n, tamanho);
 
-    // semente fixa para o experimento dar os mesmos grafos a cada execução
     srand(42);
 
     printf("\nExperimento com grafos aleatorios (tempo em ms)\n");

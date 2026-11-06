@@ -15,10 +15,8 @@ int eh_cobertura(Aresta *a, int *cobertura, int m)
     return 1;
 }
 
-// decide o vértice k: primeiro tenta com ele na cobertura, depois sem ele
 void buscar(Aresta *a, int m, int n, int k, int *atual, int tamanho, int *melhor, int *tamanho_melhor)
 {
-    // poda: daqui para frente a cobertura só cresce, não vai superar a melhor
     if (tamanho >= *tamanho_melhor)
         return;
 
@@ -50,7 +48,6 @@ int cobertura_minima_bt(Aresta *a, int m, int n, int *melhor)
         atual[i] = 0;
     }
 
-    // n+1 é maior que qualquer cobertura possível, então a primeira encontrada é aceita
     int tamanho_melhor = n + 1;
     buscar(a, m, n, 0, atual, 0, melhor, &tamanho_melhor);
     return tamanho_melhor;
@@ -66,7 +63,6 @@ int cobertura_gulosa(Aresta *a, int m, int n, int *cobertura)
     int tamanho = 0;
     while (!eh_cobertura(a, cobertura, m))
     {
-        // grau restante: conta só as arestas que ainda não estão cobertas
         int grau[n];
         for (int i = 0; i < n; i++)
         {
