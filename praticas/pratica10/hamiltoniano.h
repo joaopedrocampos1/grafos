@@ -13,6 +13,10 @@ void inicializar(GrafoMatriz *g, int n);
 void inserir_aresta(GrafoMatriz *g, int u, int v, int peso);
 void exibir_matriz(GrafoMatriz *g);
 
+// Retorna 1 se caminho[] passa uma vez por cada vértice e cada par
+// consecutivo é ligado por uma aresta, ou 0 caso contrário.
+int eh_caminho_hamiltoniano(GrafoMatriz *g, int *caminho);
+
 // Preenche caminho[] com um caminho que passa uma vez por cada vértice.
 // Retorna 1 se encontrou ou 0 se não existe.
 int encontrar_caminho_hamiltoniano_bt(GrafoMatriz *g, int *caminho);

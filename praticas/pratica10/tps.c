@@ -12,52 +12,63 @@ int custo_rota(GrafoMatriz *g, int *rota)
     return custo;
 }
 
-// gera as permutações de atual[k..n-1] trocando cada candidato para a posição k;
-// custo é o que já foi gasto de atual[0] até atual[k-1]
-void permutar(GrafoMatriz *g, int *atual, int k, int custo, int *melhor, int *custo_melhor)
-{
-    int n = g->num_vertices;
+// estado da busca, como no slide da Aula 10
+int melhor_custo;
+int melhor_rota[MAX_VERTICES];
+int rota_atual[MAX_VERTICES];
+int usado[MAX_VERTICES];
 
-    if (k == n)
+// rota_atual[0..pos-1] já está escolhida e custa custo_atual;
+// tenta cada cidade ainda não usada na posição pos
+void tsp(GrafoMatriz *g, int n, int pos, int custo_atual, int origem)
+{
+    if (pos == n)
     {
-        custo += g->adjacencia[atual[n - 1]][atual[0]]; // volta para a origem
-        if (custo < *custo_melhor)
+        int custo_total = custo_atual + g->adjacencia[rota_atual[pos - 1]][origem];
+        if (custo_total < melhor_custo)
         {
-            *custo_melhor = custo;
+            melhor_custo = custo_total;
             for (int i = 0; i < n; i++)
             {
-                melhor[i] = atual[i];
+                melhor_rota[i] = rota_atual[i];
             }
         }
         return;
     }
 
-    for (int i = k; i < n; i++)
+    for (int cidade = 0; cidade < n; cidade++)
     {
-        int aux = atual[k];
-        atual[k] = atual[i];
-        atual[i] = aux;
-
-        permutar(g, atual, k + 1, custo + g->adjacencia[atual[k - 1]][atual[k]], melhor, custo_melhor);
-
-        aux = atual[k];
-        atual[k] = atual[i];
-        atual[i] = aux;
+        if (!usado[cidade])
+        {
+            usado[cidade] = 1;
+            rota_atual[pos] = cidade;
+            int novo_custo = custo_atual + g->adjacencia[rota_atual[pos - 1]][cidade];
+            tsp(g, n, pos + 1, novo_custo, origem);
+            usado[cidade] = 0;
+        }
     }
 }
 
 int tsp_forca_bruta(GrafoMatriz *g, int *rota)
 {
-    int atual[MAX_VERTICES];
-    for (int i = 0; i < g->num_vertices; i++)
+    int n = g->num_vertices;
+    for (int i = 0; i < n; i++)
     {
-        atual[i] = i;
+        usado[i] = 0;
     }
+    melhor_custo = INT_MAX;
 
-    // atual[0] = 0 nunca sai do lugar: a origem fica fixa
-    int custo_melhor = INT_MAX;
-    permutar(g, atual, 1, 0, rota, &custo_melhor);
-    return custo_melhor;
+    // a origem (vértice 0) já começa na posição 0, então só as outras n-1
+    // cidades são permutadas: (n-1)! rotas em vez de n!
+    rota_atual[0] = 0;
+    usado[0] = 1;
+    tsp(g, n, 1, 0, 0);
+
+    for (int i = 0; i < n; i++)
+    {
+        rota[i] = melhor_rota[i];
+    }
+    return melhor_custo;
 }
 
 int tsp_vizinho_mais_proximo(GrafoMatriz *g, int origem, int *rota)

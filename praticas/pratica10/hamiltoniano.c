@@ -34,6 +34,33 @@ void exibir_matriz(GrafoMatriz *g)
     }
 }
 
+// verificador do slide da Aula 10: confere uma resposta em tempo polinomial
+int eh_caminho_hamiltoniano(GrafoMatriz *g, int *caminho)
+{
+    int n = g->num_vertices;
+    int visitado[MAX_VERTICES] = {0};
+
+    // verifica se todos os vértices aparecem exatamente uma vez
+    for (int i = 0; i < n; i++)
+    {
+        int v = caminho[i];
+        if (v < 0 || v >= n || visitado[v])
+            return 0;
+        visitado[v] = 1;
+    }
+
+    // verifica se existem arestas entre vértices consecutivos
+    for (int i = 0; i < n - 1; i++)
+    {
+        int u = caminho[i];
+        int v = caminho[i + 1];
+        if (g->adjacencia[u][v] == 0)
+            return 0;
+    }
+
+    return 1;
+}
+
 // caminho[0..pos-1] já está montado; tenta colocar na posição pos cada
 // vizinho ainda não visitado do último vértice e desfaz se não der certo
 int estender(GrafoMatriz *g, int *caminho, int *visitado, int pos, int fechar_ciclo)

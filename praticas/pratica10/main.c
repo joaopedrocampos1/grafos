@@ -77,7 +77,7 @@ int main()
         {
             printf("%c ", 'A' + caminho[i]);
         }
-        printf("\n");
+        printf("(verificado: %i)\n", eh_caminho_hamiltoniano(&grafo, caminho));
     }
     else
     {
@@ -126,6 +126,47 @@ int main()
     custo = tsp_forca_bruta(&tsp, rota);
     printf("TSP do grafo A - B - C - D reduzido: custo %i, n = %i, entao %s ciclo hamiltoniano\n\n",
            custo, tsp.num_vertices, custo == tsp.num_vertices ? "tem" : "nao tem");
+
+    // exemplo do slide da Aula 10: grafo completo com 4 cidades, melhor rota custa 80
+    GrafoMatriz cidades;
+    inicializar(&cidades, 4);
+    inserir_aresta(&cidades, 0, 1, 10); // A - B
+    inserir_aresta(&cidades, 0, 2, 15); // A - C
+    inserir_aresta(&cidades, 0, 3, 20); // A - D
+    inserir_aresta(&cidades, 1, 2, 35); // B - C
+    inserir_aresta(&cidades, 1, 3, 25); // B - D
+    inserir_aresta(&cidades, 2, 3, 30); // C - D
+
+    custo = tsp_forca_bruta(&cidades, rota);
+    printf("Caixeiro viajante do slide: custo %i, rota ", custo);
+    imprimir_rota(rota, cidades.num_vertices);
+    printf("\n\n");
+
+    // atividade guiada da Aula 10
+    GrafoMatriz atividade;
+    inicializar(&atividade, 4);
+    inserir_aresta(&atividade, 0, 1, 1); // A - B
+    inserir_aresta(&atividade, 0, 2, 4); // A - C
+    inserir_aresta(&atividade, 1, 2, 2); // B - C
+    inserir_aresta(&atividade, 1, 3, 6); // B - D
+    inserir_aresta(&atividade, 2, 3, 3); // C - D
+    inserir_aresta(&atividade, 3, 0, 5); // D - A
+
+    printf("Atividade guiada\n");
+    if (encontrar_caminho_hamiltoniano_bt(&atividade, caminho))
+    {
+        printf("Caminho hamiltoniano: ");
+        for (int i = 0; i < atividade.num_vertices; i++)
+        {
+            printf("%c ", 'A' + caminho[i]);
+        }
+        printf("(verificado: %i)\n", eh_caminho_hamiltoniano(&atividade, caminho));
+    }
+
+    custo = tsp_forca_bruta(&atividade, rota);
+    printf("Ciclo hamiltoniano de menor custo: custo %i, rota ", custo);
+    imprimir_rota(rota, atividade.num_vertices);
+    printf("\n\n");
 
     // semente fixa para o experimento dar os mesmos grafos a cada execução
     srand(42);
